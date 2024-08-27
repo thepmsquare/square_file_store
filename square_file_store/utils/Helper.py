@@ -16,7 +16,7 @@ from square_file_store.configuration import (
     config_int_square_database_port,
 )
 
-local_object_lapa_database_helper = SquareDatabaseHelper(
+local_object_square_database_helper = SquareDatabaseHelper(
     param_str_square_database_ip=config_str_square_database_ip,
     param_str_square_database_protocol=config_str_square_database_protocol,
     param_int_square_database_port=config_int_square_database_port,
@@ -44,7 +44,7 @@ def create_entry_in_file_store(
             }
         ]
 
-        response = local_object_lapa_database_helper.insert_rows(
+        response = local_object_square_database_helper.insert_rows(
             data,
             local_string_database_name,
             local_string_schema_name,
@@ -61,7 +61,7 @@ def get_file_row(file_storage_token):
 
         filters = {File.file_storage_token.name: file_storage_token}
 
-        response = local_object_lapa_database_helper.get_rows(
+        response = local_object_square_database_helper.get_rows(
             filters,
             local_string_database_name,
             local_string_schema_name,
@@ -102,7 +102,7 @@ def edit_file_delete_status(file_storage_token):
             File.file_date_deleted.name: formatted_timestamp,
         }
 
-        response = local_object_lapa_database_helper.edit_rows(
+        response = local_object_square_database_helper.edit_rows(
             filters=filters,
             data=data,
             database_name=local_string_database_name,

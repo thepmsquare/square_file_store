@@ -45,17 +45,17 @@ async def root():
 @app.post("/upload_file", status_code=status.HTTP_201_CREATED)
 @global_object_square_logger.async_auto_logger
 async def upload_file(
-        file: UploadFile,
-        file_purpose: Annotated[
-            str, Form(title="Username", description="Specify the purpose of the file")
-        ] = None,
-        system_relative_path: Annotated[
-            str,
-            Form(
-                title="System relative path",
-                description="Specify the path using '/'. For e.g. home/user_document",
-            ),
-        ] = "others/misc",
+    file: UploadFile,
+    file_purpose: Annotated[
+        str, Form(title="Username", description="Specify the purpose of the file")
+    ] = None,
+    system_relative_path: Annotated[
+        str,
+        Form(
+            title="System relative path",
+            description="Specify the path using '/'. For e.g. home/user_document",
+        ),
+    ] = "others/misc",
 ):
     try:
         file_bytes = await file.read()
@@ -133,8 +133,8 @@ async def download_file(file_storage_token: str):
 
         # check file is deleted
         if (
-                not local_dict_file_row["file_is_deleted"]
-                and local_string_system_absolute_file_path
+            not local_dict_file_row["file_is_deleted"]
+            and local_string_system_absolute_file_path
         ):
             # Get content type
             content_type, _ = mimetypes.guess_type(
@@ -199,7 +199,7 @@ async def delete_file(list_file_storage_token: List[str] = Query()):
 if __name__ == "__main__":
     try:
         if os.path.exists(config_str_ssl_key_file_path) and os.path.exists(
-                config_str_ssl_key_file_path
+            config_str_ssl_key_file_path
         ):
             run(
                 app,

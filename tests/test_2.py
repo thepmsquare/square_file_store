@@ -29,6 +29,6 @@ def test_read_main():
     assert response.status_code == 200
     upload_response = response.json()
     assert (
-            "additional_info" in upload_response
-            and "FileStorageToken" in upload_response["additional_info"]
+        "additional_info" in upload_response
+        and "FileStorageToken" in upload_response["additional_info"]
     )
