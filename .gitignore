@@ -1,0 +1,6 @@
+__pycache__/
+.idea/
+build/
+*.egg-info/
+logs
+LOCAL_STORAGE_PATH
