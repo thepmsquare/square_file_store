@@ -20,8 +20,12 @@ pip install square_file_store
 
 ## changelog
 
+### v1.0.1
+
+- replace file_purpose with app_id.
+
 ### v1.0.0
 
-- Initial implementation.
+- initial implementation.
 
 ## Feedback is appreciated. Thank you!
