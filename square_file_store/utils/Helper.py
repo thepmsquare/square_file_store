@@ -3,11 +3,9 @@ from datetime import datetime, timezone
 from fastapi import status
 from fastapi.exceptions import HTTPException
 from square_database_helper import SquareDatabaseHelper
-from square_database_structure.square.file_storage.tables import (
-    local_string_database_name,
-    local_string_schema_name,
-    File,
-)
+from square_database_structure.square import global_string_database_name
+from square_database_structure.square.file_storage import global_string_schema_name
+from square_database_structure.square.file_storage.tables import File
 
 from square_file_store.configuration import (
     global_object_square_logger,
@@ -28,7 +26,7 @@ def create_entry_in_file_store(
         content_type: str,
         system_file_name_with_extension: str,
         file_storage_token: str,
-        file_purpose: str,
+        app_id: int,
         system_relative_path: str,
 ):
     try:
@@ -40,14 +38,14 @@ def create_entry_in_file_store(
                 File.file_system_file_name_with_extension.name: system_file_name_with_extension,
                 File.file_system_relative_path.name: system_relative_path,
                 File.file_storage_token.name: file_storage_token,
-                File.file_purpose.name: file_purpose,
+                File.app_id.name: app_id,
             }
         ]
 
         response = local_object_square_database_helper.insert_rows(
             data,
-            local_string_database_name,
-            local_string_schema_name,
+            global_string_database_name,
+            global_string_schema_name,
             File.__tablename__,
         )
 
@@ -63,8 +61,8 @@ def get_file_row(file_storage_token):
 
         response = local_object_square_database_helper.get_rows(
             filters,
-            local_string_database_name,
-            local_string_schema_name,
+            global_string_database_name,
+            global_string_schema_name,
             File.__tablename__,
             ignore_filters_and_get_all=False,
         )
@@ -105,8 +103,8 @@ def edit_file_delete_status(file_storage_token):
         response = local_object_square_database_helper.edit_rows(
             filters=filters,
             data=data,
-            database_name=local_string_database_name,
-            schema_name=local_string_schema_name,
+            database_name=global_string_database_name,
+            schema_name=global_string_schema_name,
             table_name=File.__tablename__,
             ignore_filters_and_edit_all=False,
         )
