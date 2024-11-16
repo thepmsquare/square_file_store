@@ -4,10 +4,10 @@ package_name = "square_file_store"
 
 setup(
     name=package_name,
-    version="1.0.1",
+    version="2.0.0",
     packages=find_packages(),
     package_data={
-        package_name: ["data/*", "pydantic_models/*"],
+        package_name: ["data/*"],
     },
     install_requires=[
         "uvicorn>=0.24.0.post1",
@@ -15,10 +15,10 @@ setup(
         "python-multipart>=0.0.6",
         "pydantic>=2.5.3",
         "pytest>=8.0.0",
-        "square_logger>=1.0.0",
-        "square_database_helper>=1.0.0",
-        "square_commons>=1.0.0",
-        "square_database_structure>=1.0.2",
+        "square_logger>=1.0.6",
+        "square_database_helper>=2.3.0",
+        "square_commons>=1.2.0",
+        "square_database_structure>=1.3.3",
     ],
     author="thePmSquare",
     author_email="thepmsquare@gmail.com",

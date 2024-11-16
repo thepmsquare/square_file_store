@@ -2,17 +2,19 @@ from datetime import datetime, timezone
 
 from fastapi import status
 from fastapi.exceptions import HTTPException
-from square_database_helper import SquareDatabaseHelper
+from square_commons import get_api_output_in_standard_format
+from square_database_helper import SquareDatabaseHelper, FiltersV0
+from square_database_helper.pydantic_models import FilterConditionsV0
 from square_database_structure.square import global_string_database_name
 from square_database_structure.square.file_storage import global_string_schema_name
 from square_database_structure.square.file_storage.tables import File
 
 from square_file_store.configuration import (
-    global_object_square_logger,
     config_str_square_database_protocol,
     config_str_square_database_ip,
     config_int_square_database_port,
 )
+from square_file_store.messages import messages
 
 local_object_square_database_helper = SquareDatabaseHelper(
     param_str_square_database_ip=config_str_square_database_ip,
@@ -22,18 +24,18 @@ local_object_square_database_helper = SquareDatabaseHelper(
 
 
 def create_entry_in_file_store(
-        file_name_with_extention: str,
-        content_type: str,
-        system_file_name_with_extension: str,
-        file_storage_token: str,
-        app_id: int,
-        system_relative_path: str,
+    file_name_with_extension: str,
+    content_type: str,
+    system_file_name_with_extension: str,
+    file_storage_token: str,
+    app_id: int,
+    system_relative_path: str,
 ):
     try:
 
         data = [
             {
-                File.file_name_with_extension.name: file_name_with_extention,
+                File.file_name_with_extension.name: file_name_with_extension,
                 File.file_content_type.name: content_type,
                 File.file_system_file_name_with_extension.name: system_file_name_with_extension,
                 File.file_system_relative_path.name: system_relative_path,
@@ -42,12 +44,12 @@ def create_entry_in_file_store(
             }
         ]
 
-        response = local_object_square_database_helper.insert_rows(
-            data,
-            global_string_database_name,
-            global_string_schema_name,
-            File.__tablename__,
-        )
+        response = local_object_square_database_helper.insert_rows_v0(
+            data=data,
+            database_name=global_string_database_name,
+            schema_name=global_string_schema_name,
+            table_name=File.__tablename__,
+        )["data"]["main"]
 
         return response
     except Exception as e:
@@ -56,41 +58,34 @@ def create_entry_in_file_store(
 
 def get_file_row(file_storage_token):
     try:
-
-        filters = {File.file_storage_token.name: file_storage_token}
-
-        response = local_object_square_database_helper.get_rows(
-            filters,
-            global_string_database_name,
-            global_string_schema_name,
-            File.__tablename__,
-            ignore_filters_and_get_all=False,
-        )
-        if isinstance(response, list) and len(response) == 1 and response[0]:
-            return response[0]
-        elif len(response) > 1:
-            global_object_square_logger.logger.warning(
-                f"Multiple files with same file_storage_token: {file_storage_token}"
+        response = local_object_square_database_helper.get_rows_v0(
+            database_name=global_string_database_name,
+            schema_name=global_string_schema_name,
+            table_name=File.__tablename__,
+            filters=FiltersV0(
+                root={
+                    File.file_storage_token.name: FilterConditionsV0(
+                        eq=file_storage_token
+                    ),
+                }
+            ),
+        )["data"]["main"]
+        if len(response) != 1:
+            output_content = get_api_output_in_standard_format(
+                message=messages["GENERIC_400"],
+                log=f"incorrect file_storage_token: {file_storage_token}.",
             )
-
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"incorrect file_storage_token:{file_storage_token}",
+                detail=output_content,
             )
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"incorrect file_storage_token:{file_storage_token}",
-            )
-
+        return response[0]
     except Exception as e:
         raise e
 
 
-def edit_file_delete_status(file_storage_token):
+def edit_file_delete_status(file_storage_tokens):
     try:
-        filters = {File.file_storage_token.name: file_storage_token}
-
         # Get the current timestamp
         timestamp = datetime.now(timezone.utc)
         formatted_timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S.%f+00")
@@ -100,40 +95,18 @@ def edit_file_delete_status(file_storage_token):
             File.file_date_deleted.name: formatted_timestamp,
         }
 
-        response = local_object_square_database_helper.edit_rows(
-            filters=filters,
+        local_object_square_database_helper.edit_rows_v0(
             data=data,
             database_name=global_string_database_name,
             schema_name=global_string_schema_name,
             table_name=File.__tablename__,
-            ignore_filters_and_edit_all=False,
+            filters=FiltersV0(
+                root={
+                    File.file_storage_token.name: FilterConditionsV0(
+                        in_=file_storage_tokens
+                    ),
+                }
+            ),
         )
-
-        if isinstance(response, list) and len(response) == 1 and response[0]:
-            file_data = response[0]
-            if (
-                    File.file_storage_token.name in file_data
-                    and file_data[File.file_storage_token.name] == file_storage_token
-            ):
-                return file_data
-            else:
-                raise HTTPException(
-                    status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"incorrect file_storage_token:{file_storage_token}",
-                )
-        elif len(response) > 1:
-            global_object_square_logger.logger.warning(
-                f"Multiple files with same file_storage_token: {file_storage_token}"
-            )
-
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"incorrect file_storage_token:{file_storage_token}",
-            )
-        else:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"incorrect file_storage_token:{file_storage_token}",
-            )
     except Exception as e:
         raise e

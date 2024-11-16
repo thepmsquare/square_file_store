@@ -23,12 +23,9 @@ def test_read_main():
     files = {"file": (file_name, file, "multipart/form-data")}
 
     # Make the request
-    response = client.post("/upload_file", files=files)
+    response = client.post("/upload_file/v0", files=files)
 
     # Assert the response status code
-    assert response.status_code == 200
+    assert response.status_code == 201
     upload_response = response.json()
-    assert (
-        "additional_info" in upload_response
-        and "FileStorageToken" in upload_response["additional_info"]
-    )
+    assert "data" in upload_response and "main" in upload_response["data"]

@@ -19,7 +19,7 @@ def upload_document():
     files = {"file": (file_name, file, "multipart/form-data")}
 
     # Make the request
-    response = client.post("/upload_file", files=files)
+    response = client.post("/upload_file/v0", files=files)
 
     return response.json()
 
@@ -30,11 +30,11 @@ def test_read_main():
     #################################
 
     upload_result = upload_document()
-    uploaded_file_storage_token = upload_result["additional_info"]["FileStorageToken"]
+    uploaded_file_storage_token = upload_result["data"]["main"]
     parameter = {"file_storage_token": uploaded_file_storage_token}
 
     # Make the request
-    response = client.get("/download_file", params=parameter)
+    response = client.get("/download_file/v0", params=parameter)
 
     # Assert the response status code
     assert response.status_code == 200
