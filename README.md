@@ -16,6 +16,10 @@ pip install square_file_store
 
 ## changelog
 
+### v2.1.0
+
+- set allow_credentials=True.
+
 ### v2.0.0
 
 - rearrange file structure.
