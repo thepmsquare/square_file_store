@@ -16,6 +16,10 @@ pip install square_file_store
 
 ## changelog
 
+### v2.2.0
+
+- setup auto docker image build github action.
+
 ### v2.1.0
 
 - set allow_credentials=True.
