@@ -16,6 +16,10 @@ pip install square_file_store
 
 ## changelog
 
+### v2.2.1
+
+- add rollback logic to upload_file/v0.
+
 ### v2.2.0
 
 - setup auto docker image build github action.

@@ -9,6 +9,10 @@ from fastapi.exceptions import HTTPException
 from fastapi.params import Query
 from fastapi.responses import FileResponse, JSONResponse
 from square_commons import get_api_output_in_standard_format
+from square_database_helper import FiltersV0
+from square_database_helper.pydantic_models import FilterConditionsV0
+from square_database_structure.square import global_string_database_name
+from square_database_structure.square.file_storage import global_string_schema_name
 from square_database_structure.square.file_storage.tables import File
 
 from square_file_store.configuration import (
@@ -20,6 +24,7 @@ from square_file_store.utils.Helper import (
     create_entry_in_file_store,
     get_file_row,
     edit_file_delete_status,
+    local_object_square_database_helper,
 )
 
 router = APIRouter(
@@ -107,7 +112,21 @@ async def upload_file_v0(
         """
         rollback logic
         """
-        # pass
+        if os.path.exists(system_file_absolute_path):
+            os.remove(system_file_absolute_path)
+        if file_storage_token:
+            local_object_square_database_helper.delete_rows_v0(
+                database_name=global_string_database_name,
+                schema_name=global_string_schema_name,
+                table_name=File.__tablename__,
+                filters=FiltersV0(
+                    root={
+                        File.file_storage_token.name: FilterConditionsV0(
+                            eq=file_storage_token
+                        ),
+                    }
+                ),
+            )
         return JSONResponse(
             status_code=http_exception.status_code, content=http_exception.detail
         )
@@ -115,7 +134,21 @@ async def upload_file_v0(
         """
         rollback logic
         """
-        # pass
+        if os.path.exists(system_file_absolute_path):
+            os.remove(system_file_absolute_path)
+        if file_storage_token:
+            local_object_square_database_helper.delete_rows_v0(
+                database_name=global_string_database_name,
+                schema_name=global_string_schema_name,
+                table_name=File.__tablename__,
+                filters=FiltersV0(
+                    root={
+                        File.file_storage_token.name: FilterConditionsV0(
+                            eq=file_storage_token
+                        ),
+                    }
+                ),
+            )
         output_content = get_api_output_in_standard_format(
             message=messages["GENERIC_500"],
             log=str(e),
