@@ -1,10 +1,10 @@
 import mimetypes
 import os
 import uuid
-from typing import Annotated, Optional, List
+from typing import Annotated, List, Optional
 from uuid import UUID
 
-from fastapi import status, APIRouter, Form, UploadFile
+from fastapi import APIRouter, Form, UploadFile, status
 from fastapi.exceptions import HTTPException
 from fastapi.params import Query
 from fastapi.responses import FileResponse, JSONResponse
@@ -20,10 +20,10 @@ from square_file_store.configuration import (
     global_object_square_logger,
 )
 from square_file_store.messages import messages
-from square_file_store.utils.Helper import (
+from square_file_store.utils.helper import (
     create_entry_in_file_store,
-    get_file_row,
     edit_file_delete_status,
+    get_file_row,
     local_object_square_database_helper,
 )
 
@@ -112,6 +112,7 @@ async def upload_file_v0(
         """
         rollback logic
         """
+        global_object_square_logger.logger.error(http_exception, exc_info=True)
         if os.path.exists(system_file_absolute_path):
             os.remove(system_file_absolute_path)
         if file_storage_token:
@@ -149,6 +150,7 @@ async def upload_file_v0(
                     }
                 ),
             )
+        global_object_square_logger.logger.error(e, exc_info=True)
         output_content = get_api_output_in_standard_format(
             message=messages["GENERIC_500"],
             log=str(e),
@@ -215,6 +217,7 @@ async def download_file_v0(file_storage_token: UUID):
         rollback logic
         """
         # pass
+        global_object_square_logger.logger.error(http_exception, exc_info=True)
         return JSONResponse(
             status_code=http_exception.status_code, content=http_exception.detail
         )
@@ -223,6 +226,7 @@ async def download_file_v0(file_storage_token: UUID):
         rollback logic
         """
         # pass
+        global_object_square_logger.logger.error(e, exc_info=True)
         output_content = get_api_output_in_standard_format(
             message=messages["GENERIC_500"],
             log=str(e),
@@ -285,6 +289,7 @@ async def delete_files_v0(file_storage_tokens: List[UUID] = Query()):
         rollback logic
         """
         # pass
+        global_object_square_logger.logger.error(http_exception, exc_info=True)
         return JSONResponse(
             status_code=http_exception.status_code,
             content=http_exception.detail,
@@ -294,6 +299,7 @@ async def delete_files_v0(file_storage_tokens: List[UUID] = Query()):
         rollback logic
         """
         # pass
+        global_object_square_logger.logger.error(e, exc_info=True)
         output_content = get_api_output_in_standard_format(
             message=messages["GENERIC_500"],
             log=str(e),

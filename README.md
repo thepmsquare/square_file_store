@@ -16,6 +16,11 @@ pip install square_file_store
 
 ## changelog
 
+### v2.2.2
+
+- add auto logger decorator to all functions.
+- add logs to errors in all endpoints.
+
 ### v2.2.1
 
 - add rollback logic to upload_file/v0.
