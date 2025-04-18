@@ -24,7 +24,7 @@ local_object_square_database_helper = SquareDatabaseHelper(
 )
 
 
-@global_object_square_logger.auto_logger
+@global_object_square_logger.auto_logger()
 def create_entry_in_file_store(
     file_name_with_extension: str,
     content_type: str,
@@ -58,7 +58,7 @@ def create_entry_in_file_store(
         raise e
 
 
-@global_object_square_logger.auto_logger
+@global_object_square_logger.auto_logger()
 def get_file_row(file_storage_token):
     try:
         response = local_object_square_database_helper.get_rows_v0(
@@ -87,7 +87,7 @@ def get_file_row(file_storage_token):
         raise e
 
 
-@global_object_square_logger.auto_logger
+@global_object_square_logger.auto_logger()
 def edit_file_delete_status(file_storage_tokens):
     try:
         # Get the current timestamp

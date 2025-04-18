@@ -16,6 +16,10 @@ pip install square_file_store
 
 ## changelog
 
+### v2.2.3
+
+- bump square_logger to 2.0.0
+
 ### v2.2.2
 
 - add auto logger decorator to all functions.

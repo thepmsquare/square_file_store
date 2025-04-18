@@ -33,7 +33,7 @@ router = APIRouter(
 
 
 @router.post("/upload_file/v0", status_code=status.HTTP_201_CREATED)
-@global_object_square_logger.async_auto_logger
+@global_object_square_logger.auto_logger()
 async def upload_file_v0(
     file: UploadFile,
     app_id: Annotated[
@@ -161,7 +161,7 @@ async def upload_file_v0(
 
 
 @router.get("/download_file/v0", status_code=status.HTTP_200_OK)
-@global_object_square_logger.async_auto_logger
+@global_object_square_logger.auto_logger()
 async def download_file_v0(file_storage_token: UUID):
     file_storage_token = str(file_storage_token)
     try:
@@ -237,7 +237,7 @@ async def download_file_v0(file_storage_token: UUID):
 
 
 @router.delete("/delete_files/v0", status_code=status.HTTP_200_OK)
-@global_object_square_logger.async_auto_logger
+@global_object_square_logger.auto_logger()
 async def delete_files_v0(file_storage_tokens: List[UUID] = Query()):
     list_file_storage_tokens = list(set(str(x) for x in file_storage_tokens))
     deleted_file_storage_tokens = []
