@@ -19,6 +19,7 @@ setup(
         "square_database_helper>=2.3.0",
         "square_commons>=1.2.0",
         "square_database_structure>=1.3.3",
+        "httpx>=0.27.2",
     ],
     author="thePmSquare",
     author_email="thepmsquare@gmail.com",
