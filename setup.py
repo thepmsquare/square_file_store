@@ -4,7 +4,7 @@ package_name = "square_file_store"
 
 setup(
     name=package_name,
-    version="2.2.3",
+    version="2.3.0",
     packages=find_packages(),
     package_data={
         package_name: ["data/*"],

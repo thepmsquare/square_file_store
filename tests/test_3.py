@@ -1,15 +1,8 @@
 import io
 
-from fastapi.testclient import TestClient
 
-from square_file_store.main import (
-    app,
-)
-
-client = TestClient(app)
-
-
-def upload_document():
+def upload_document(create_client_and_cleanup):
+    client = create_client_and_cleanup
     file_content = b"Hello, this is the content of the file."
     file_name = "example.txt"
 
@@ -24,12 +17,13 @@ def upload_document():
     return response.json()
 
 
-def test_read_main():
+def test_read_main(create_client_and_cleanup):
     #################################
     # download file test case
     #################################
+    client = create_client_and_cleanup
 
-    upload_result = upload_document()
+    upload_result = upload_document(client)
     uploaded_file_storage_token = upload_result["data"]["main"]
     parameter = {"file_storage_token": uploaded_file_storage_token}
 

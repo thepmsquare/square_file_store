@@ -1,18 +1,11 @@
 import io
 
-from fastapi.testclient import TestClient
 
-from square_file_store.main import (
-    app,
-)
-
-client = TestClient(app)
-
-
-def test_read_main():
+def test_read_main(create_client_and_cleanup):
     #################################
     # upload file test case
     #################################
+    client = create_client_and_cleanup
 
     file_content = b"Hello, this is the content of the file."
     file_name = "example.txt"

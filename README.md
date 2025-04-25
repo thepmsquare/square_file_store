@@ -16,6 +16,17 @@ pip install square_file_store
 
 ## changelog
 
+### v2.3.0
+
+- env
+    - add DB_IP, DB_PORT, DB_USERNAME, DB_PASSWORD
+    - add config.testing.ini
+    - file path reading through os.path.join method.
+- testing
+    - add conftest file to create and cleanup test database, also to patch config file.
+    - add pytest.yaml to enable pytest in github actions.
+    - update existing tests to use the new fixtures.
+
 ### v2.2.3
 
 - bump square_logger to 2.0.0
