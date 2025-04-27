@@ -31,9 +31,6 @@ def get_patched_configuration():
 @pytest.fixture(scope="session")
 def create_client_and_cleanup(get_patched_configuration):
     from square_database_structure import create_database_and_tables
-    from square_file_store.main import (
-        app,
-    )
 
     create_database_and_tables(
         db_username=get_patched_configuration.config_str_db_username,
@@ -41,6 +38,10 @@ def create_client_and_cleanup(get_patched_configuration):
         db_password=get_patched_configuration.config_str_db_password,
         db_ip=get_patched_configuration.config_str_db_ip,
     )
+    from square_file_store.main import (
+        app,
+    )
+
     client = TestClient(app)
     yield client
     from sqlalchemy import text, create_engine
