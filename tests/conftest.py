@@ -5,28 +5,30 @@ import pytest
 from fastapi.testclient import TestClient
 
 
-def patched_join(*args):
+@pytest.fixture(scope="session")
+def get_patched_configuration():
+    def patched_join(*args):
+        *rest, last = args
+        if last == "config.ini":
+            last = "config.testing.ini"
 
-    *rest, last = args
-    if last == "config.ini":
-        last = "config.testing.ini"
+        return original_join(*rest, last)
 
-    return original_join(*rest, last)
+    original_join = os.path.join
+    os.path.join = patched_join
 
-
-original_join = os.path.join
-
-
-@pytest.fixture
-def get_patched_configuration(monkeypatch, tmp_path):
     import square_file_store.configuration
 
-    monkeypatch.setattr(os.path, "join", patched_join)
     importlib.reload(square_file_store.configuration)
-    return square_file_store.configuration
+    config = square_file_store.configuration
+
+    yield config
+
+    # cleanup
+    os.path.join = original_join
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def create_client_and_cleanup(get_patched_configuration):
     from square_database_structure import create_database_and_tables
     from square_file_store.main import (

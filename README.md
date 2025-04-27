@@ -16,6 +16,11 @@ pip install square_file_store
 
 ## changelog
 
+### v2.3.1 (inprogress)
+
+- testing
+    - update get_patched_configuration and create_client_and_cleanup to be session scoped.
+
 ### v2.3.0
 
 - env
