@@ -21,6 +21,9 @@ try:
     # environment
     config_str_host_ip = ldict_configuration["ENVIRONMENT"]["HOST_IP"]
     config_int_host_port = int(ldict_configuration["ENVIRONMENT"]["HOST_PORT"])
+    config_list_allow_origins = eval(
+        ldict_configuration["ENVIRONMENT"]["ALLOW_ORIGINS"]
+    )
 
     config_str_log_file_name = ldict_configuration["ENVIRONMENT"]["LOG_FILE_NAME"]
     config_str_local_storage_folder_path = ldict_configuration["ENVIRONMENT"][
