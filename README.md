@@ -16,23 +16,18 @@ pip install square_file_store
 
 ## changelog
 
-### v2.3.1
-
-- testing
-    - update get_patched_configuration and create_client_and_cleanup to be session scoped.
-- env
-    - add ALLOW_ORIGINS
-
 ### v2.3.0
 
 - env
     - add DB_IP, DB_PORT, DB_USERNAME, DB_PASSWORD
+    - add ALLOW_ORIGINS
     - add config.testing.ini
     - file path reading through os.path.join method.
 - testing
     - add conftest file to create and cleanup test database, also to patch config file.
     - add pytest.yaml to enable pytest in github actions.
     - update existing tests to use the new fixtures.
+    - update get_patched_configuration and create_client_and_cleanup to be session scoped.
 
 ### v2.2.3
 
