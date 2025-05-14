@@ -22,7 +22,6 @@ from square_file_store.configuration import (
 from square_file_store.messages import messages
 from square_file_store.utils.helper import (
     create_entry_in_file_store,
-    edit_file_delete_status,
     get_file_row,
     local_object_square_database_helper,
 )
@@ -48,6 +47,8 @@ async def upload_file_v0(
         ),
     ] = "others/misc",
 ):
+    system_file_absolute_path = None
+    file_storage_token = None
     try:
         """
         validation
@@ -135,7 +136,7 @@ async def upload_file_v0(
         """
         rollback logic
         """
-        if os.path.exists(system_file_absolute_path):
+        if system_file_absolute_path and os.path.exists(system_file_absolute_path):
             os.remove(system_file_absolute_path)
         if file_storage_token:
             local_object_square_database_helper.delete_rows_v0(
@@ -182,17 +183,6 @@ async def download_file_v0(file_storage_token: UUID):
                 local_dict_file_row[File.file_system_file_name_with_extension.name],
             )
         )
-
-        # check file is deleted
-        if local_dict_file_row[File.file_is_deleted.name]:
-            output_content = get_api_output_in_standard_format(
-                message=messages["GENERIC_400"],
-                log=f"file: {file_storage_token} deleted.",
-            )
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=output_content,
-            )
         if not os.path.exists(local_string_system_absolute_file_path):
             output_content = get_api_output_in_standard_format(
                 message=messages["GENERIC_500"],
@@ -252,8 +242,6 @@ async def delete_files_v0(file_storage_tokens: List[UUID] = Query()):
         for file_storage_token in list_file_storage_tokens:
             # get file path
             local_dict_file_row = get_file_row(file_storage_token)
-            if local_dict_file_row[File.file_is_deleted.name]:
-                continue
             local_string_system_absolute_file_path = str(
                 os.path.join(
                     global_absolute_path_local_storage,
@@ -275,7 +263,18 @@ async def delete_files_v0(file_storage_tokens: List[UUID] = Query()):
                 )
 
             deleted_file_storage_tokens.append(file_storage_token)
-        edit_file_delete_status(deleted_file_storage_tokens)
+        local_object_square_database_helper.delete_rows_v0(
+            database_name=global_string_database_name,
+            schema_name=global_string_schema_name,
+            table_name=File.__tablename__,
+            filters=FiltersV0(
+                root={
+                    File.file_storage_token.name: FilterConditionsV0(
+                        in_=deleted_file_storage_tokens
+                    ),
+                }
+            ),
+        )
         """
         return value
         """

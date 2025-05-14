@@ -16,6 +16,11 @@ pip install square_file_store
 
 ## changelog
 
+### v2.3.1
+
+- bump square_database_structure to >= 2.5.1
+- switch to hard delete for files for db entries.
+
 ### v2.3.0
 
 - env

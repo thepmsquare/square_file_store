@@ -1,5 +1,3 @@
-from datetime import datetime, timezone
-
 from fastapi import status
 from fastapi.exceptions import HTTPException
 from square_commons import get_api_output_in_standard_format
@@ -83,34 +81,5 @@ def get_file_row(file_storage_token):
                 detail=output_content,
             )
         return response[0]
-    except Exception as e:
-        raise e
-
-
-@global_object_square_logger.auto_logger()
-def edit_file_delete_status(file_storage_tokens):
-    try:
-        # Get the current timestamp
-        timestamp = datetime.now(timezone.utc)
-        formatted_timestamp = timestamp.strftime("%Y-%m-%d %H:%M:%S.%f+00")
-
-        data = {
-            File.file_is_deleted.name: True,
-            File.file_date_deleted.name: formatted_timestamp,
-        }
-
-        local_object_square_database_helper.edit_rows_v0(
-            data=data,
-            database_name=global_string_database_name,
-            schema_name=global_string_schema_name,
-            table_name=File.__tablename__,
-            filters=FiltersV0(
-                root={
-                    File.file_storage_token.name: FilterConditionsV0(
-                        in_=file_storage_tokens
-                    ),
-                }
-            ),
-        )
     except Exception as e:
         raise e
