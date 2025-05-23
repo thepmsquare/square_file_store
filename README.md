@@ -16,6 +16,10 @@ pip install square_file_store
 
 ## changelog
 
+### v2.3.2
+
+- remove config.ini and config.testing.ini from version control.
+
 ### v2.3.1
 
 - bump square_database_structure to >= 2.5.1

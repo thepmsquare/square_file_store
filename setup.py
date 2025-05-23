@@ -4,7 +4,7 @@ package_name = "square_file_store"
 
 setup(
     name=package_name,
-    version="2.3.1",
+    version="2.3.2",
     packages=find_packages(),
     package_data={
         package_name: ["data/*"],
@@ -17,7 +17,7 @@ setup(
         "pytest>=8.0.0",
         "square_logger>=2.0.0",
         "square_database_helper>=2.3.0",
-        "square_commons>=1.2.0",
+        "square_commons>=2.1.0",
         "square_database_structure>=2.5.1",
         "httpx>=0.27.2",
     ],
