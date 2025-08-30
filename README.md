@@ -8,7 +8,11 @@ file storage layer for my personal server.
 
 ## goals
 
-(wip)
+- integration with square_*
+- unified file api across all projects
+- simplicity first
+- generic design
+- future extensibility
 
 ## installation
 
