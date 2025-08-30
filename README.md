@@ -20,7 +20,7 @@ pip install square_file_store
 
 ### configuration
 
-update the settings in `config.ini` and `config.testing.ini` to match your environment (urls, logging, etc).
+update the settings in `config.ini` and `config.testing.ini` to match your environment (urls, logging, etc.).
 
 ### running the service
 
