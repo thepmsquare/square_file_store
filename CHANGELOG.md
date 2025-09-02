@@ -1,5 +1,9 @@
 # changelog
 
+## v2.3.4
+
+- move application logic to utils instead of routes.
+
 ## v2.3.3
 
 - docs
