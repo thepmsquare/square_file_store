@@ -55,6 +55,12 @@ try:
     config_int_log_backup_count = int(
         ldict_configuration["SQUARE_LOGGER"]["LOG_BACKUP_COUNT"]
     )
+    config_formatter_choice = ldict_configuration["SQUARE_LOGGER"]["FORMATTER_CHOICE"]
+    if config_formatter_choice not in ("human_readable", "json"):
+        raise ValueError(f"Invalid formatter choice: {config_formatter_choice}")
+    config_bool_enable_redaction = eval(
+        ldict_configuration["SQUARE_LOGGER"]["ENABLE_REDACTION"]
+    )
     # ===========================================
     # ===========================================
     # square_database_helper
@@ -72,10 +78,12 @@ try:
     # initialize logger
 
     global_object_square_logger = SquareLogger(
-        pstr_log_file_name=config_str_log_file_name,
-        pint_log_level=config_int_log_level,
-        pstr_log_path=config_str_log_path,
-        pint_log_backup_count=config_int_log_backup_count,
+        log_file_name=config_str_log_file_name,
+        log_level=config_int_log_level,
+        log_path=config_str_log_path,
+        log_backup_count=config_int_log_backup_count,
+        formatter_choice=config_formatter_choice,
+        enable_redaction=config_bool_enable_redaction,
     )
 except Exception as e:
     print(
