@@ -1,5 +1,9 @@
 # changelog
 
+## v2.3.6
+
+- remove setup.py and switch to pyproject.toml
+
 ## v2.3.5
 
 - env
