@@ -1,10 +1,10 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv-build"]
+build-backend = "uv_build"
 
 [project]
 name = "square_file_store"
-version = "2.3.7"
+version = "2.3.8"
 description = "file storage layer for my personal server."
 readme = "README.md"
 readme-content-type = "text/markdown"
@@ -41,6 +41,7 @@ classifiers = [
     "Framework :: FastAPI"
 ]
 
-[tool.hatch.build.targets.wheel]
-packages = ["square_file_store"]
-include = ["square_file_store/data/*"]
+[tool.uv.build-backend]
+module-name = "square_file_store"
+module-root = ""
+source-include = ["square_file_store/data/*"]

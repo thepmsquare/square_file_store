@@ -1,12 +1,10 @@
-FROM python:3.12-slim
-
+FROM ghcr.io/astral-sh/uv:python3.12-trixie-slim
+WORKDIR /app
 COPY . /app
 
-WORKDIR /app
+RUN uv sync --locked --extra all
 
-RUN pip install .
-
-CMD ["python3", "/usr/local/lib/python3.12/site-packages/square_file_store/main.py"]
+CMD ["uv", "run", "--", "python", "-m", "square_file_store.main"]
 
 # Uncomment for debugging
 # CMD ["bash", "-c", "while true; do sleep 60; done"]
