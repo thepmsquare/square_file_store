@@ -9,6 +9,8 @@
     - upload_file_v0
     - download_file_v0
     - delete_files_v0
+- dependencies
+    - update "square_commons>=3.1.0"
 
 ## v2.3.8
 
