@@ -17,6 +17,10 @@ from square_file_store.configuration import (
     global_object_square_logger,
 )
 from square_file_store.messages import messages
+from square_file_store.pydantic_models.core import (
+    UploadFileV0Response,
+    DeleteFilesV0Response,
+)
 from square_file_store.utils.helper import (
     create_entry_in_file_store,
     local_object_square_database_helper,
@@ -82,11 +86,17 @@ async def util_upload_file_v0(file, app_id, system_relative_path):
         """
         return value
         """
+        data_pydantic = UploadFileV0Response(
+            main=response[0][File.file_storage_token.name]
+        )
         output_content = get_api_output_in_standard_format(
             message=messages["GENERIC_CREATION_SUCCESSFUL"],
-            data={"main": response[0][File.file_storage_token.name]},
+            data=data_pydantic.model_dump(),
+            as_dict=False,
         )
-        return JSONResponse(content=output_content, status_code=status.HTTP_201_CREATED)
+        return JSONResponse(
+            content=output_content.model_dump(), status_code=status.HTTP_201_CREATED
+        )
     except HTTPException as http_exception:
         """
         rollback logic
@@ -254,11 +264,15 @@ def util_delete_files_v0(file_storage_tokens):
         """
         return value
         """
+        data_pydantic = DeleteFilesV0Response(main=deleted_file_storage_tokens)
         output_content = get_api_output_in_standard_format(
-            data={"main": deleted_file_storage_tokens},
+            data=data_pydantic.model_dump(),
             message=messages["GENERIC_DELETE_SUCCESSFUL"],
+            as_dict=False,
         )
-        return JSONResponse(content=output_content)
+        return JSONResponse(
+            content=output_content.model_dump(), status_code=status.HTTP_200_OK
+        )
     except HTTPException as http_exception:
         """
         rollback logic

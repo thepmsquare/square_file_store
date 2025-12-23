@@ -1,5 +1,15 @@
 # changelog
 
+## v2.4.0
+
+- pydantic_models
+    - add UploadFileV0Response
+    - add DeleteFilesV0Response
+- add output format (pydantic) validation for the following:
+    - upload_file_v0
+    - download_file_v0
+    - delete_files_v0
+
 ## v2.3.8
 
 - switch build-system to uv.

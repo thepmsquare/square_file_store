@@ -4,13 +4,18 @@ from uuid import UUID
 from fastapi import APIRouter, Form, UploadFile, status
 from fastapi.exceptions import HTTPException
 from fastapi.params import Query
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
 from square_commons import get_api_output_in_standard_format
+from square_commons.api_utils import StandardResponse
 
 from square_file_store.configuration import (
     global_object_square_logger,
 )
 from square_file_store.messages import messages
+from square_file_store.pydantic_models.core import (
+    UploadFileV0Response,
+    DeleteFilesV0Response,
+)
 from square_file_store.utils.routes.core import (
     util_upload_file_v0,
     util_download_file_v0,
@@ -22,7 +27,11 @@ router = APIRouter(
 )
 
 
-@router.post("/upload_file/v0", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/upload_file/v0",
+    status_code=status.HTTP_201_CREATED,
+    response_model=StandardResponse[UploadFileV0Response],
+)
 @global_object_square_logger.auto_logger()
 async def upload_file_v0(
     file: UploadFile,
@@ -55,7 +64,11 @@ async def upload_file_v0(
         )
 
 
-@router.get("/download_file/v0", status_code=status.HTTP_200_OK)
+@router.get(
+    "/download_file/v0",
+    status_code=status.HTTP_200_OK,
+    response_class=FileResponse,
+)
 @global_object_square_logger.auto_logger()
 async def download_file_v0(file_storage_token: UUID):
     try:
@@ -75,7 +88,11 @@ async def download_file_v0(file_storage_token: UUID):
         )
 
 
-@router.delete("/delete_files/v0", status_code=status.HTTP_200_OK)
+@router.delete(
+    "/delete_files/v0",
+    status_code=status.HTTP_200_OK,
+    response_model=StandardResponse[DeleteFilesV0Response],
+)
 @global_object_square_logger.auto_logger()
 async def delete_files_v0(file_storage_tokens: List[UUID] = Query()):
     try:
