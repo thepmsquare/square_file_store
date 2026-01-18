@@ -116,6 +116,7 @@ async def util_upload_file_v0(file, app_id, system_relative_path):
                         ),
                     }
                 ),
+                response_as_pydantic=True,
             )
         return JSONResponse(
             status_code=http_exception.status_code, content=http_exception.detail
@@ -138,6 +139,7 @@ async def util_upload_file_v0(file, app_id, system_relative_path):
                         ),
                     }
                 ),
+                response_as_pydantic=True,
             )
         global_object_square_logger.logger.error(e, exc_info=True)
         output_content = get_api_output_in_standard_format(
@@ -260,6 +262,7 @@ def util_delete_files_v0(file_storage_tokens):
                     ),
                 }
             ),
+            response_as_pydantic=True,
         )
         """
         return value

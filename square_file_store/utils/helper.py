@@ -49,7 +49,8 @@ def create_entry_in_file_store(
             database_name=global_string_database_name,
             schema_name=global_string_schema_name,
             table_name=File.__tablename__,
-        )["data"]["main"]
+            response_as_pydantic=True,
+        ).data.main
 
         return response
     except Exception as e:
@@ -70,7 +71,8 @@ def get_file_row(file_storage_token):
                     ),
                 }
             ),
-        )["data"]["main"]
+            response_as_pydantic=True,
+        ).data.main
         if len(response) != 1:
             output_content = get_api_output_in_standard_format(
                 message=messages["GENERIC_400"],
