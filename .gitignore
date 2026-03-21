@@ -6,3 +6,4 @@ logs
 LOCAL_STORAGE_PATH
 config.ini
 config.testing.ini
+.coverage
