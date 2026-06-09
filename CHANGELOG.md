@@ -1,5 +1,9 @@
 # changelog
 
+## v2.4.2
+
+- update app title and version in fastapi.
+
 ## v2.4.1
 
 - set response_as_pydantic True for all square_database_helper utils instead of dict, for better typehints.
